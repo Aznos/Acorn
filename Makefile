@@ -1,30 +1,24 @@
 CXX = g++
+CXXFLAGS = -std=c++17 -Isrc/inc -Isrc/inc/imgui -Wall
+LDFLAGS = -Lsrc/lib -lsfml-graphics -lsfml-window -lsfml-system -lopengl32
+IMGUI_SRCS = $(wildcard src/inc/imgui/*.cpp) src/inc/imgui/imgui-SFML.cpp
+SRCS = $(wildcard src/*.cpp)
+OBJS = $(SRCS:src/%.cpp=bin/%.o) $(IMGUI_SRCS:src/inc/imgui/%.cpp=bin/%.o)
 
-EXE = acorn
+EXE = bin/acorn
 
-SRC_DIR = src
-BIN_DIR = bin
-INC_DIR = $(SRC_DIR)/inc
-LIB_DIR = $(SRC_DIR)/lib
+all: $(EXE)
 
-CXXFLAGS = -std=c++17 -I$(INC_DIR) -Wall
-LDFLAGS = -L$(LIB_DIR) -lsfml-graphics -lsfml-window -lsfml-system
-
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
-OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%.o)
-
-all: $(BIN_DIR)/$(EXE)
-
-$(BIN_DIR)/$(EXE): $(OBJECTS)
+$(EXE): $(OBJS)
 	$(CXX) $^ -o $@ $(LDFLAGS)
 
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
+bin/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-run: $(BIN_DIR)/$(EXE)
-	./$(BIN_DIR)/$(EXE)
+bin/%.o: src/inc/imgui/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(BIN_DIR)/*.o $(BIN_DIR)/$(EXE)
+	rm -rf bin/*.o $(EXE)
 
 .PHONY: all clean
