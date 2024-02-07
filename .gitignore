@@ -1,0 +1,6 @@
+*.o
+*.exe
+*.dll
+*.a
+*.cmake
+src/inc/SFML
