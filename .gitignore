@@ -1,0 +1,8 @@
+*.o
+*.exe
+*.dll
+*.a
+*.cmake
+src/inc/SFML
+src/inc/imgui
+*.ini
